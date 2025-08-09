@@ -1,0 +1,23 @@
+name: clash
+
+services:
+  clash:
+    image: dreamacro/clash-premium
+    container_name: clash
+    restart: unless-stopped
+    volumes:
+      - ./config:/root/.config/clash
+    networks: [clash]
+    ports:
+      - "${CLASH_EXPORT_HOST:-127.0.0.1}:${CLASH_EXPORT_PORT:-9870}:7890"
+  yacd:
+    image: haishanh/yacd
+    container_name: clash-yacd
+    restart: unless-stopped
+    networks: [nginx, clash]
+
+networks:
+  nginx:
+    external: true
+  clash:
+    name: clash

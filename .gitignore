@@ -1,0 +1,7 @@
+*/*/
+
+config.yaml
+*.env
+
+!*.env.example
+!.nginx*.env

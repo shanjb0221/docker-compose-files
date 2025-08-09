@@ -1,0 +1,29 @@
+name: docker-mirror
+
+services:
+  dockerhub:
+    container_name: docker-mirror-hub
+    image: dqzboy/registry:latest
+    restart: unless-stopped
+    environment:
+      - OTEL_TRACES_EXPORTER=none
+      - HTTP_PROXY=http://clash:7890
+      - HTTPS_PROXY=http://clash:7890
+    volumes:
+      - ${DOCKER_MIRROR_REGISTRY}:/var/lib/registry
+      - ./registry-hub.yml:/etc/distribution/config.yml
+    networks: [nginx, clash]
+
+  registry-ui:
+    container_name: docker-mirror-ui
+    image: dqzboy/docker-registry-ui:latest
+    environment:
+      - DOCKER_REGISTRY_URL=http://docker-mirror-hub:5000
+      - ENABLE_DELETE_IMAGES=true
+      - NO_SSL_VERIFICATION=true
+    restart: unless-stopped
+    networks: [nginx]
+
+networks:
+  nginx:
+    external: true
