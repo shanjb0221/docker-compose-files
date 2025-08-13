@@ -1,0 +1,58 @@
+name: qbittorrent
+
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=12711
+      - TORRENTING_PORT=6881
+    volumes:
+      - ./qbittorrent/config:/config
+      - ${DOWNLOAD_PATH}:/downloads
+    ports:
+      - 6889:6881
+      - 6889:6881/udp
+    networks: [nginx]
+  auto-bangumi:
+    image: estrellaxd/auto_bangumi:latest
+    container_name: auto-bangumi
+    restart: unless-stopped
+    volumes:
+      - ./auto-bangumi/config:/app/config
+      - ./auto-bangumi/data:/app/data
+    networks: [nginx, clash]
+    environment:
+      - PGID=${PUID}
+      - PUID=${PGID}
+      - TZ=Asia/Shanghai
+      - HTTP_PROXY=http://clash:7890
+      - HTTPS_PROXY=http://clash:7890
+  jellyfin:
+    image: nyanmisaka/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - ./jellyfin/config:/config
+      - ./jellyfin/cache:/cache
+      - type: bind
+        source: ${DOWNLOAD_PATH}
+        target: /medias
+        read_only: true
+    environment:
+      - HTTP_PROXY=http://clash:7890
+      - HTTPS_PROXY=http://clash:7890
+    devices:
+      - /dev/dri:/dev/dri
+    networks: [clash, nginx]
+
+networks:
+  nginx:
+    external: true
+  clash:
+    external: true
