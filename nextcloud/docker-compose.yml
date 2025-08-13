@@ -1,0 +1,33 @@
+name: nextcloud
+
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    container_name: nextcloud-db
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - ./mysql:/var/lib/mysql
+    env_file: .env
+    networks: [default]
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: nextcloud-redis
+    networks: [default]
+  app:
+    image: nextcloud:latest
+    restart: always
+    container_name: nextcloud
+    volumes:
+      - ${HOST_DATA_PATH}:/data
+      - ./data:/var/www/html
+    env_file: .env
+    networks: [default, nginx]
+    depends_on: [redis, db]
+
+networks:
+  nginx:
+    external: true
+  default:
+    name: nextcloud
