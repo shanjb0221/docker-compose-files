@@ -1,0 +1,22 @@
+name: hoyolab-auto
+
+services:
+  hoyolab:
+    image: shanjb20/hoyolab-auto:latest-redsocks
+    restart: unless-stopped
+    container_name: hoyolab-auto
+    environment:
+      - CONFIG_PATH=/app/config/config.json5
+      - SOCKS5_IP=clash
+      - SOCKS5_PORT=7890
+    env_file: .env
+    volumes:
+      - ./config:/app/config:ro
+      - ./data:/data
+    cap_add: [NET_ADMIN]
+    networks: [clash]
+    dns: [101.6.6.6, 8.8.8.8]
+
+networks:
+  clash:
+    external: true
