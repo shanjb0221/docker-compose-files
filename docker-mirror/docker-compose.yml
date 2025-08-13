@@ -21,9 +21,12 @@ services:
       - DOCKER_REGISTRY_URL=http://docker-mirror-hub:5000
       - ENABLE_DELETE_IMAGES=true
       - NO_SSL_VERIFICATION=true
+    env_file: .env
     restart: unless-stopped
     networks: [nginx]
 
 networks:
   nginx:
+    external: true
+  clash:
     external: true

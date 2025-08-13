@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./config:/root/.config/clash
-    networks: [clash]
+    networks: [nginx, clash]
     ports:
       - "${CLASH_EXPORT_HOST:-127.0.0.1}:${CLASH_EXPORT_PORT:-9870}:7890"
   yacd:
