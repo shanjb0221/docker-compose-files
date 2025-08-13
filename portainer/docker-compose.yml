@@ -6,7 +6,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOST_DOCKER_SOCKET}:/var/run/docker.sock
+    env_file: .env
     networks: [nginx]
 
 networks:
