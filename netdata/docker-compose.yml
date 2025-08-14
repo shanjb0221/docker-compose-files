@@ -2,11 +2,10 @@ name: netdata
 
 services:
   netdata:
-    image: netdata/netdata
+    image: netdata/netdata:stable
     container_name: netdata
     restart: unless-stopped
     hostname: netdata
-    networks: [nginx]
     pid: host
     network_mode: host
     cap_add: [SYS_PTRACE, SYS_ADMIN]
@@ -26,6 +25,3 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /run/dbus:/run/dbus:ro
 
-networks:
-  nginx:
-    external: true

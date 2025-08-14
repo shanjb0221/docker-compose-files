@@ -20,7 +20,6 @@ services:
     restart: always
     container_name: nextcloud
     volumes:
-      - ${HOST_DATA_PATH}:/data
       - ./data:/var/www/html
     env_file: .env
     networks: [default, nginx]

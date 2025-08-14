@@ -1,5 +1,7 @@
 */*/
 
+docker-compose.local.yml
+docker-compose.override.yml
 config.yaml
 *.env
 
