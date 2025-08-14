@@ -35,6 +35,7 @@ services:
   jellyfin:
     image: nyanmisaka/jellyfin:latest
     container_name: jellyfin
+    hostname: menas
     restart: unless-stopped
     privileged: true
     volumes:
