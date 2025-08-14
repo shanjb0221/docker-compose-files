@@ -1,0 +1,10 @@
+name: goauthing
+
+services:
+  goauthing:
+    image: ghcr.io/z4yx/goauthing:latest
+    container_name: goauthing
+    restart: unless-stopped
+    volumes:
+      - ./config:/.auth-thu
+    command: auth -k
