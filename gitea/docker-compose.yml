@@ -1,0 +1,32 @@
+name: gitea
+
+services:
+  gitea:
+    image: gitea/gitea:latest-rootless
+    container_name: gitea
+    restart: unless-stopped
+    volumnes:
+      - ${GITEA_DATA_DIR}:/var/lib/gitea
+      - ./config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 23322:2222
+    depends_on: [mysql]
+    networks: [gitea, nginx]
+    env_file: .env
+
+  mysql:
+    image: mariadb:latest
+    container_name: gitea-mysql
+    restart: unless-stopped
+    volumes:
+      - ./mysql:/var/lib/mysql
+    env_file: .env
+    networks: [gitea]
+
+networks:
+  nginx:
+    external: true
+  gitea:
+    name: gitea
