@@ -5,7 +5,7 @@ services:
     image: gitea/gitea:latest-rootless
     container_name: gitea
     restart: unless-stopped
-    volumnes:
+    volumes:
       - ${GITEA_DATA_DIR}:/var/lib/gitea
       - ./config:/etc/gitea
       - /etc/timezone:/etc/timezone:ro
