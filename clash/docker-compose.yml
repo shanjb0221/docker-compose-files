@@ -2,11 +2,11 @@ name: clash
 
 services:
   clash:
-    image: dreamacro/clash-premium
+    image: metacubex/mihomo:latest
     container_name: clash
     restart: unless-stopped
     volumes:
-      - ./config:/root/.config/clash
+      - ./config:/root/.config/mihomo
     networks: [nginx, clash]
     ports:
       - "${CLASH_EXPORT_HOST:-127.0.0.1}:${CLASH_EXPORT_PORT:-9870}:7890"
