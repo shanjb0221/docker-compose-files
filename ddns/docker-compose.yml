@@ -1,0 +1,14 @@
+name: ddns
+
+services:
+  ddns:
+    image: jeessy/ddns-go:latest
+    restart: always
+    container_name: ddns
+    networks: [nginx]
+    volumes:
+      - ./config:/root
+
+networks:
+  nginx:
+    external: true
