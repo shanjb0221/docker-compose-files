@@ -6,7 +6,7 @@ services:
     image: henrygd/beszel-agent-intel:latest
     container_name: beszel-agent
     restart: always
-    network_mode: host
+    network_mode: container:tailscale
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./agent:/var/lib/beszel-agent
