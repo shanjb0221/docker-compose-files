@@ -1,0 +1,27 @@
+services:
+  memos:
+    image: neosmemo/memos:stable
+    restart: always
+    container_name: memos
+    volumes:
+      - ./memos/:/var/opt/memos
+    env_file: .env
+    networks: [nginx]
+  memogram:
+    image: aliuq/memogram:latest
+    restart: always
+    container_name: memogram
+    environment:
+      - SERVER_ADDR=dns:memos:5230
+      - HTTP_PROXY=http://clash:7890
+      - HTTPS_PROXY=http://clash:7890
+      - BOT_PROXY_TOKEN=http://clash:7890
+    env_file: .env
+    depends_on: [memos]
+    networks: [nginx, clash]
+
+networks:
+  nginx:
+    external: true
+  clash:
+    external: true
