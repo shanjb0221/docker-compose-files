@@ -2,9 +2,9 @@ name: goauthing
 
 services:
   goauthing:
-    image: git.s.thusaac.com:12711/shanjb0221/goauthing:latest
+    image: git.u.thusaac.com:12711/shanjb0221/goauthing:latest
     container_name: goauthing
     restart: unless-stopped
     volumes:
-      - ./config:/.auth-thu
+      - ./config/auth-thu:/.auth-thu
     command: auth -k
