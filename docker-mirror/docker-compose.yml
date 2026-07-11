@@ -14,11 +14,35 @@ services:
       - ./registry-hub.yml:/etc/distribution/config.yml
     networks: [nginx, clash]
 
-  registry-ui:
-    container_name: docker-mirror-ui
+  ghcr:
+    container_name: docker-mirror-ghcr
+    image: dqzboy/registry:latest
+    restart: unless-stopped
+    environment:
+      - OTEL_TRACES_EXPORTER=none
+      - HTTP_PROXY=http://clash:7890
+      - HTTPS_PROXY=http://clash:7890
+    volumes:
+      - ${GHCR_MIRROR_REGISTRY}:/var/lib/registry
+      - ./registry-ghcr.yml:/etc/distribution/config.yml
+    networks: [nginx, clash]
+
+  dockerhub-ui:
+    container_name: docker-mirror-hub-ui
     image: dqzboy/docker-registry-ui:latest
     environment:
       - DOCKER_REGISTRY_URL=http://docker-mirror-hub:5000
+      - ENABLE_DELETE_IMAGES=true
+      - NO_SSL_VERIFICATION=true
+    env_file: .env
+    restart: unless-stopped
+    networks: [nginx]
+
+  ghcr-ui:
+    container_name: docker-mirror-ghcr-ui
+    image: dqzboy/docker-registry-ui:latest
+    environment:
+      - DOCKER_REGISTRY_URL=http://docker-mirror-ghcr:5000
       - ENABLE_DELETE_IMAGES=true
       - NO_SSL_VERIFICATION=true
     env_file: .env
