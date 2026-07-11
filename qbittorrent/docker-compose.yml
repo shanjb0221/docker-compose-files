@@ -2,7 +2,7 @@ name: qbittorrent
 
 services:
   qbittorrent:
-    image: linuxserver/qbittorrent:latest
+    image: linuxserver/qbittorrent:5.1.4
     container_name: qbittorrent
     restart: unless-stopped
     environment:
@@ -15,9 +15,9 @@ services:
       - ./qbittorrent/config:/config
       - ${DOWNLOAD_PATH}:/downloads
     ports:
-      - 6889:6881
-      - 6889:6881/udp
-    networks: [nginx]
+      - 56889:6881
+      - 56889:6881/udp
+    networks: [nginx, clash]
   auto-bangumi:
     image: estrellaxd/auto_bangumi:latest
     container_name: auto-bangumi
@@ -30,8 +30,6 @@ services:
       - PGID=${PUID}
       - PUID=${PGID}
       - TZ=Asia/Shanghai
-      - HTTP_PROXY=http://clash:7890
-      - HTTPS_PROXY=http://clash:7890
   jellyfin:
     image: nyanmisaka/jellyfin:latest
     container_name: jellyfin
